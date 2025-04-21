@@ -1,0 +1,25 @@
+<div class="todo-item">
+  <div class="info">
+    <h3 class="title" [title]="todo.title">{{ todo.title }}</h3>
+    <div class="dates timeout">
+      <span>Created: {{ todo.createdAt | date: 'dd-MM-yyyy' }}</span>
+      <span class="mr-2"> / </span>
+      <span *ngIf="!showTimeLeft">
+        Expiration: {{ todo.expirationDate | date: 'dd-MM-yyyy' }}
+      </span>
+
+      <span class="timeout" *ngIf="showTimeLeft && timeLeft" [class.critical]="isCritical()">
+        <mat-icon>access_alarm</mat-icon>
+        <span>{{ timeLeft }}</span>
+      </span>
+    </div>
+  </div>
+  <div class="actions">
+    <button (click)="toggleFavorite()">
+      <mat-icon [class.favorite]="todo.favorite">{{ todo.favorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+    <button (click)="remove()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>

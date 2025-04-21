@@ -1,0 +1,30 @@
+<section *ngIf="isFavoritePage">
+  <div class="card">
+    <h2>Favorite TODOs</h2>
+    <ng-container *ngIf="todos$ | async as todos">
+      <app-item
+        *ngFor="let todo of getFavorites(todos)"
+        [todo]="todo"
+      />
+      <p *ngIf="getFavorites(todos).length === 0">No favorites yet.</p>
+    </ng-container>
+  </div>
+</section>
+
+<section *ngIf="!isFavoritePage">
+  <div class="card">
+    <h2>Today TODO</h2>
+    <ng-container *ngIf="todayTodos$ | async as todos">
+      <app-item *ngFor="let todo of todos" [todo]="todo" [showTimeLeft]="true" />
+      <p *ngIf="todos.length === 0">No tasks for today.</p>
+    </ng-container>
+  </div>
+
+  <div class="card">
+    <h2>Upcoming</h2>
+    <ng-container *ngIf="upcomingTodos$ | async as todos">
+      <app-item *ngFor="let todo of todos" [todo]="todo" />
+      <p *ngIf="todos.length === 0">No tasks for today.</p>
+    </ng-container>
+  </div>
+</section>

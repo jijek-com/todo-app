@@ -1,0 +1,49 @@
+<mat-sidenav-container class="layout-container">
+  <mat-sidenav
+    #sidenav
+    class="mobile-sidenav"
+    mode="over"
+    [opened]="false"
+    role="navigation"
+  >
+    <div class="mobile-sidenav__header">
+      <button
+        mat-icon-button
+        (click)="sidenav.close()"
+        aria-label="Close menu"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <nav class="mobile-nav">
+      <a routerLink="/add" (click)="sidenav.close()" class="mobile-nav__link" mat-button>Add</a>
+      <a routerLink="/list" (click)="sidenav.close()" class="mobile-nav__link" mat-button>List</a>
+      <a routerLink="/favorite" (click)="sidenav.close()" class="mobile-nav__link" mat-button>Favorite</a>
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="header">
+
+      <button
+        mat-icon-button
+        (click)="sidenav.toggle()"
+        class="burger-button"
+        aria-label="Toggle sidenav"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <a href="/" class="header__title">My TODO List</a>
+
+      <nav class="header__nav">
+        <a routerLink="/add" routerLinkActive="header__link--active" class="header__link" mat-button>Add</a>
+        <a routerLink="/list" routerLinkActive="header__link--active" class="header__link" mat-button>List</a>
+        <a routerLink="/favorite" routerLinkActive="header__link--active" class="header__link" mat-button>Favorite</a>
+      </nav>
+    </mat-toolbar>
+
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

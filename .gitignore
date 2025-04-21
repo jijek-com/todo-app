@@ -1,5 +1,18 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
+# Custom
+.yarn
+.angular
+*.patch
+.husky/*
+junit.xml
+/junit
+.env
+package-lock.json
+yarn.lock
+.nx
+src/i18n/source.xlf
+
 # Compiled output
 /dist
 /tmp

@@ -1,0 +1,76 @@
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0 1rem;
+  border-bottom: 1px solid #ccc;
+
+  .info {
+    flex: 1;
+    min-width: 0;
+
+    .title {
+      margin: 0;
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dates {
+      margin-top: 4px;
+      font-size: 16px;
+      color: #666;
+    }
+
+    .timeout {
+      display: flex;
+      align-items: center;
+
+      .mat-icon {
+        margin-right: 6px;
+      }
+    }
+
+    .mr-2 {
+      margin: 0 6px;
+    }
+
+    .critical {
+      color: red;
+      font-weight: bold;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-self: flex-end;
+    gap: 0.5rem;
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      .mat-icon.favorite {
+        color: var(--mat-sys-surface-tint);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .todo-item {
+    flex-direction: column;
+    justify-content: flex-start;
+
+    .info {
+      width: 100%;
+    }
+
+    .actions {
+      margin-top: 8px;
+      align-self: start;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+<mat-toolbar class="header-title">
+  <button
+    mat-icon-button
+    class="header-title__back"
+    type="button"
+    (click)="goBack()"
+    aria-label="Назад"
+  >
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span class="header-title__text">ADD Todo</span>
+</mat-toolbar>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="todo-form">
+    <div class="form-field">
+      <label>Title</label>
+      <textarea formControlName="title" rows="3"></textarea>
+      <div *ngIf="isInvalid('title')" class="error-text">
+        {{ getErrorMessage('title') }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Expiration Date</label>
+      <input type="date" formControlName="expirationDate" [min]="minDate" />
+      <div *ngIf="isInvalid('expirationDate')" class="error-text">
+        {{ getErrorMessage('expirationDate') }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Expiration Time</label>
+      <input
+        formControlName="expirationTime"
+        [ngxTimepicker]="picker"
+        [min]="minTime"
+        readonly
+        placeholder="Select time"
+      />
+      <ngx-material-timepicker #picker></ngx-material-timepicker>
+    </div>
+
+    <button type="submit">Create</button>
+  </form>
+
