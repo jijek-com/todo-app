@@ -37,7 +37,7 @@
         readonly
         placeholder="Select time"
       />
-      <ngx-material-timepicker #picker></ngx-material-timepicker>
+      <ngx-material-timepicker #picker (opened)="onTimepickerOpen()" (closed)="onChangeTimePicker()"></ngx-material-timepicker>
     </div>
 
     <button type="submit">Create</button>

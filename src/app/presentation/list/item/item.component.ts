@@ -1,9 +1,10 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {DatePipe, JsonPipe, NgIf} from "@angular/common";
-import {Todo} from "../list.type";
-import {MatIcon} from "@angular/material/icon";
-import {interval, Subscription} from "rxjs";
-import {TodosService} from "../todo.service";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { DatePipe, JsonPipe, NgIf } from "@angular/common";
+import { Todo } from "../list.type";
+import { MatIcon } from "@angular/material/icon";
+import { Subscription } from "rxjs";
+import { TodosService } from "../todo.service";
+import { TimeService } from "../time.service";
 
 @Component({
   selector: 'app-item',
@@ -30,49 +31,21 @@ export class ItemComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdr: ChangeDetectorRef,
+    private timeService: TimeService,
     private todosService: TodosService) {
   }
 
   public ngOnInit(): void {
-    if (this.showTimeLeft && this.todo.expirationDate) {
-      this.updateTimeLeft();
-      this.timerSub = interval(60000).subscribe(() => {
-        this.updateTimeLeft();
-        this.cdr.markForCheck();
-      });
-    }
+    if (!this.showTimeLeft || !this.todo.expirationDate) return;
+
+    this.timerSub = this.timeService.now$.subscribe(now => {
+      this.timeLeft = this.calculateTimeLeft(this.todo, now);
+      this.cdr.markForCheck();
+    });
   }
 
   public ngOnDestroy(): void {
     this.timerSub?.unsubscribe();
-  }
-
-  public updateTimeLeft(): void {
-    this.timeLeft = this.getTimeLeft(this.todo);
-  }
-
-  public getTimeLeft(todo: Todo): string {
-    const exp = new Date(todo.expirationDate);
-    if (todo.expirationTime) {
-      const [time, modifier] = todo.expirationTime.split(' ');
-
-      let [hours, minutes] = time.split(':').map(Number);
-
-      if (modifier === 'PM' && hours < 12) {
-        hours += 12;
-      } else if (modifier === 'AM' && hours === 12) {
-        hours = 0;
-      }
-
-      exp.setHours(hours, minutes, 0, 0);
-    }
-
-    const diff = exp.getTime() - Date.now();
-    if (diff <= 0) return 'Expired';
-
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    return `${hours}h ${minutes}m`;
   }
 
   public isCritical(): boolean {
@@ -100,5 +73,27 @@ export class ItemComponent implements OnInit, OnDestroy {
     this.todosService.delete(this.todo).subscribe(() => {
       this.isDeleting = false;
     });
+  }
+
+  private calculateTimeLeft(todo: Todo, now: Date): string {
+    const exp = new Date(todo.expirationDate);
+
+    if (todo.expirationTime) {
+      const [time, modifier] = todo.expirationTime.split(' ');
+      let [hours, minutes] = time.split(':').map(Number);
+
+      if (modifier === 'PM' && hours < 12) hours += 12;
+      if (modifier === 'AM' && hours === 12) hours = 0;
+
+      exp.setHours(hours, minutes, 0, 0);
+    }
+
+    const diff = exp.getTime() - now.getTime();
+    if (diff <= 0) return 'Expired';
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    return `${hours}h ${minutes}m ${seconds}s`;
   }
 }
