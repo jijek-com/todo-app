@@ -10,8 +10,10 @@
 
       <span class="timeout" *ngIf="showTimeLeft && timeLeft" [class.critical]="isCritical()">
         <mat-icon>access_alarm</mat-icon>
-        <span>{{ timeLeft }}</span>
+        <span *ngIf="timeLeft !== 'Expired'; else emptyTemplate">{{ timeLeft }}</span>
       </span>
+
+      <ng-template #emptyTemplate>00:00:00</ng-template>
     </div>
   </div>
   <div class="actions">
